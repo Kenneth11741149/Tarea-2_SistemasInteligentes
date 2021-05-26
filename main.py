@@ -2,11 +2,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix
+
+
 
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
+
+from sklearn.neighbors import KNeighborsClassifier
 
 import time
 
@@ -135,6 +139,34 @@ def decisicion_tree():
         for max_depth in max_depths:
             Ejercicio3(mode,max_depth)
 
+def knn():
+    kays = [1,3,5,7,9,11,13,15]
+    for k in kays:
+        Ejercicio2(k)
+
+def Ejercicio2(k):
+    dataset = pd.read_csv("genero_peliculas_training.csv")
+
+    X = dataset.iloc[:, :-1]
+    y = dataset.iloc[:, 10]
+    labelEncoder_X = LabelEncoder()
+    X = X.apply(LabelEncoder().fit_transform)
+    Knn = KNeighborsClassifier(n_neighbors=k).fit(X,y)
+
+    testing_dataset = pd.read_csv("genero_peliculas_testing.csv")
+    X2 = testing_dataset.iloc[:, :-1]
+    X2 = X2.apply(LabelEncoder().fit_transform)
+    y2 = testing_dataset.iloc[:, 10]
+
+    start = time.time()
+    y_pred = Knn.predict(X2)
+    prediction_time = time.time() - start
+    print("Analitics for: "+"on k: "+str(k))
+
+    print("\n")
+    print("Prediction Time: " + str(prediction_time))
+    print(confusion_matrix(y2, y_pred, ))
+    print(classification_report(y2, y_pred, zero_division="warn"))
 
 def Ejercicio3(mode, max_depth):
     dataset = pd.read_csv("genero_peliculas_training.csv")
@@ -165,6 +197,7 @@ def Ejercicio3(mode, max_depth):
     prediction_time = time.time() - start
     print("Analitics for: "+mode+" on depth: "+str(max_depth))
     print("Prediction Time: "+str(prediction_time))
+    '''
     accuracy = accuracy_score(y2, y_pred)
     print("Accuracy: "+str(accuracy))
     the_average = "micro"
@@ -174,9 +207,11 @@ def Ejercicio3(mode, max_depth):
     print("Recall: "+str(recall))
     f_score = f1_score(y2, y_pred, average=the_average)
     print("F1-Score: "+str(f_score))
+    '''
     print("\n")
 
-
+    print(confusion_matrix(y2,y_pred,))
+    print(classification_report(y2, y_pred, zero_division="warn"))
 
 
 
@@ -188,8 +223,10 @@ while menu:
     print("1. Kmeans.")
     print("2. Agglomerative Clustering.")
     print("3. DBScan.")
-    print("*Ejercicio 3")
-    print("4. Decision Tree Classifier.")
+    print("*Ejercicio 2*")
+    print("4. Knn")
+    print("*Ejercicio 3*")
+    print("5. Decision Tree Classifier.")
     selection = int(input("Ingrese su eleccion: "))
     if selection == 1:
         k_means_clustering()
@@ -201,6 +238,8 @@ while menu:
         DBScan()
         print("Output guardado en la carpeta DBScan.")
     elif selection == 4:
+        knn()
+    elif selection == 5:
         decisicion_tree()
 
     else:
