@@ -132,12 +132,7 @@ def DB(distance_between_neighbors, min_samples_neighborhood, dataset, datasetnam
     plt.clf()
 
 
-def decisicion_tree():
-    modes = ["gini","entropy"]
-    max_depths = [2,3,4,5,None]
-    for mode in modes:
-        for max_depth in max_depths:
-            Ejercicio3(mode,max_depth)
+
 
 def knn():
     kays = [1,3,5,7,9,11,13,15]
@@ -168,6 +163,13 @@ def Ejercicio2(k):
     print(confusion_matrix(y2, y_pred, ))
     print(classification_report(y2, y_pred, zero_division="warn"))
 
+def decisicion_tree():
+    modes = ["gini","entropy"]
+    max_depths = [2,3,4,5,None]
+    for mode in modes:
+        for max_depth in max_depths:
+            Ejercicio3(mode,max_depth)
+
 def Ejercicio3(mode, max_depth):
     dataset = pd.read_csv("genero_peliculas_training.csv")
 
@@ -197,17 +199,7 @@ def Ejercicio3(mode, max_depth):
     prediction_time = time.time() - start
     print("Analitics for: "+mode+" on depth: "+str(max_depth))
     print("Prediction Time: "+str(prediction_time))
-    '''
-    accuracy = accuracy_score(y2, y_pred)
-    print("Accuracy: "+str(accuracy))
-    the_average = "micro"
-    precision = precision_score(y2, y_pred, average=the_average)
-    print("Precision: "+str(precision))
-    recall = recall_score(y2, y_pred, average=the_average)
-    print("Recall: "+str(recall))
-    f_score = f1_score(y2, y_pred, average=the_average)
-    print("F1-Score: "+str(f_score))
-    '''
+
     print("\n")
 
     print(confusion_matrix(y2,y_pred,))
@@ -247,40 +239,14 @@ while menu:
 
 
 
-
-
-
-
 '''
-dataset = pd.read_csv("genero_peliculas_training.csv")
-print(dataset)
-X = dataset.iloc[:,:-1]
-print("X will be")
-#print(X)
-y = dataset.iloc[:,5]
-print("Y will be")
-print(y)
-
-
-
-'''
-
-from sklearn.tree import DecisionTreeClassifier
-
-'''
-iris = load_iris()
-X,y = iris.data, iris.target
-print("data")
-print(X)
-print("target")
-print(y)
-clf = tree.DecisionTreeClassifier()
-clf = clf.fit(X,y)
-tree.plot_tree(clf)
-
-import graphviz
-dot_data = tree.export_graphviz(clf, out_file=None)
-graph = graphviz.Source(dot_data)
-graph.render("iris")
-
+    accuracy = accuracy_score(y2, y_pred)
+    print("Accuracy: "+str(accuracy))
+    the_average = "micro"
+    precision = precision_score(y2, y_pred, average=the_average)
+    print("Precision: "+str(precision))
+    recall = recall_score(y2, y_pred, average=the_average)
+    print("Recall: "+str(recall))
+    f_score = f1_score(y2, y_pred, average=the_average)
+    print("F1-Score: "+str(f_score))
 '''
