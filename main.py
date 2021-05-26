@@ -1,15 +1,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
-
+from sklearn.cluster import DBSCAN
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn import tree
 
 
 
-from sklearn.cluster import KMeans
+
 
 def k_means_clustering():
     datasetlist = ["datos_1.csv","datos_2.csv","datos_3.csv"]
@@ -54,10 +55,8 @@ def agglomerative_clustering():
         for i in range(1, 6):  # 1 through 5 clusters
             agglomerative(i, None, dataset, names[j])
         distances = [0.25,0.50,0.75,1.0,1.5]
-        l = 0
         for distance in distances:
             agglomerative(None,distance,dataset,names[j])
-            l = l + 1
         j = j + 1
 
 
@@ -79,6 +78,47 @@ def agglomerative(number_of_clusters,distance,dataset,datasetname):
     plt.cla()
     plt.clf()
 
+def DBScan():
+    datasetlist = ["datos_1.csv", "datos_2.csv", "datos_3.csv"]
+    names = []
+    i = 0
+    for element in datasetlist:
+        names.append(datasetlist[i].replace(".csv", ""))
+        i = i + 1
+    i = 0
+    for dataset in datasetlist:
+        dataset = pd.read_csv(dataset)
+        neighbors_distance = [0.25,0.35,0.5]
+        min_samples = [5, 10, 15]
+        for distance in neighbors_distance:  # 1 through 5 clusters
+            for sample in min_samples:
+                DB(distance,sample,dataset,names[i])
+                #agglomerative(None, distance, dataset, names[j])
+        i = i + 1
+
+def DB(distance_between_neighbors, min_samples_neighborhood, dataset, datasetname):
+    #Db Scan
+    label = DBSCAN(eps=distance_between_neighbors, min_samples=min_samples_neighborhood).fit(dataset)
+    #core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+    #core_samples_mask[db.core_sample_indices_] = True
+    labels = label.labels_
+
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise_ = list(labels).count(-1)
+
+
+
+    #no_clusters = len(dataset.unique(labels))
+    #no_noise = np.sum(dataset.array(labels) == -1, axis=0)
+    plt.scatter(dataset['x'], dataset['y'],  c=label.labels_)
+
+    distance_between_neighbors = str(distance_between_neighbors).replace(".","_")
+    save_location = "DBScan\\"+str(datasetname)+"_eps_"+str(distance_between_neighbors)+"_min_s_"+str(min_samples_neighborhood)
+    plt.savefig(save_location)
+    plt.cla()
+    plt.clf()
+
+
 
 menu = True
 while menu:
@@ -88,6 +128,8 @@ while menu:
         k_means_clustering()
     elif selection == 2:
         agglomerative_clustering()
+    elif selection == 3:
+        DBScan()
     else:
         menu = False
 
