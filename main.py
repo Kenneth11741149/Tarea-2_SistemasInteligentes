@@ -167,11 +167,12 @@ def Ejercicio3(mode, max_depth):
     print("Prediction Time: "+str(prediction_time))
     accuracy = accuracy_score(y2, y_pred)
     print("Accuracy: "+str(accuracy))
-    precision = precision_score(y2, y_pred, average='micro')
+    the_average = "micro"
+    precision = precision_score(y2, y_pred, average=the_average)
     print("Precision: "+str(precision))
-    recall = recall_score(y2, y_pred, average='micro')
+    recall = recall_score(y2, y_pred, average=the_average)
     print("Recall: "+str(recall))
-    f_score = f1_score(y2, y_pred, average='micro')
+    f_score = f1_score(y2, y_pred, average=the_average)
     print("F1-Score: "+str(f_score))
     print("\n")
 
@@ -184,9 +185,11 @@ menu = True
 while menu:
     print("*****Menu*****")
     print("*Ejercicio 1*")
-    print("1. Kmeans")
-    print("2. Agglomerative Clustering")
-    print("3. DBScan")
+    print("1. Kmeans.")
+    print("2. Agglomerative Clustering.")
+    print("3. DBScan.")
+    print("*Ejercicio 3")
+    print("4. Decision Tree Classifier.")
     selection = int(input("Ingrese su eleccion: "))
     if selection == 1:
         k_means_clustering()
