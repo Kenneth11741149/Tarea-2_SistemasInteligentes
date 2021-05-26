@@ -1,9 +1,17 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
+
+
+from sklearn.tree import DecisionTreeClassifier
+
+
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn import tree
@@ -118,18 +126,64 @@ def DB(distance_between_neighbors, min_samples_neighborhood, dataset, datasetnam
     plt.cla()
     plt.clf()
 
+def Ejercicio3():
+    dataset = pd.read_csv("genero_peliculas_training.csv")
+
+
+    #print(dataset)
+    X = dataset.iloc[:, :-1]
+    #print("X will be")
+    #print(X)
+    y = dataset.iloc[:,10]
+    #print("Y will be")
+    #print(y)
+
+    labelEncoder_X = LabelEncoder()
+    X = X.apply(LabelEncoder().fit_transform)
+    #print(X)
+
+    clf = DecisionTreeClassifier(criterion="gini").fit(X,y)
+
+    testing_dataset = pd.read_csv("genero_peliculas_testing.csv")
+    X2 = testing_dataset.iloc[:, :-1]
+    X2 = X2.apply(LabelEncoder().fit_transform)
+    y2 = testing_dataset.iloc[:,10]
+    #print(X2)
+    #print(y2)
+
+    y_pred = clf.predict(X2)
+    accuracy = accuracy_score(y2, y_pred)
+    print(str(accuracy))
+
+    precision = precision_score(y2, y_pred,average='weighted')
+    print(str(precision))
+    #recall_score(y2, y_pred)
+    #f1_score(y2, y_pred)
+
+
+
+
 
 
 menu = True
 while menu:
-    print("Menu")
+    print("*****Menu*****")
+    print("*Ejercicio 1*")
+    print("1. Kmeans")
+    print("2. Agglomerative Clustering")
+    print("3. DBScan")
     selection = int(input("Ingrese su eleccion: "))
     if selection == 1:
         k_means_clustering()
+        print("Output guardado en la carpeta Kmeans.")
     elif selection == 2:
         agglomerative_clustering()
+        print("Output guardado en la carpeta Agglomerative Clustering.")
     elif selection == 3:
         DBScan()
+        print("Output guardado en la carpeta DBScan.")
+    elif selection == 4:
+        Ejercicio3()
     else:
         menu = False
 
@@ -149,10 +203,7 @@ y = dataset.iloc[:,5]
 print("Y will be")
 print(y)
 
-from sklearn.preprocessing import LabelEncoder
-labelEncoder_X = LabelEncoder()
-X = X.apply(LabelEncoder().fit_transform)
-print(X)
+
 
 '''
 
