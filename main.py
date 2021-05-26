@@ -8,6 +8,7 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
 
+import time
 
 from sklearn.tree import DecisionTreeClassifier
 
@@ -126,7 +127,16 @@ def DB(distance_between_neighbors, min_samples_neighborhood, dataset, datasetnam
     plt.cla()
     plt.clf()
 
-def Ejercicio3():
+
+def decisicion_tree():
+    modes = ["gini","entropy"]
+    max_depths = [2,3,4,5,None]
+    for mode in modes:
+        for max_depth in max_depths:
+            Ejercicio3(mode,max_depth)
+
+
+def Ejercicio3(mode, max_depth):
     dataset = pd.read_csv("genero_peliculas_training.csv")
 
 
@@ -142,7 +152,7 @@ def Ejercicio3():
     X = X.apply(LabelEncoder().fit_transform)
     #print(X)
 
-    clf = DecisionTreeClassifier(criterion="gini").fit(X,y)
+    clf = DecisionTreeClassifier(criterion=mode,max_depth=max_depth).fit(X,y)
 
     testing_dataset = pd.read_csv("genero_peliculas_testing.csv")
     X2 = testing_dataset.iloc[:, :-1]
@@ -150,15 +160,20 @@ def Ejercicio3():
     y2 = testing_dataset.iloc[:,10]
     #print(X2)
     #print(y2)
-
+    start = time.time()
     y_pred = clf.predict(X2)
+    prediction_time = time.time() - start
+    print("Analitics for: "+mode+" on depth: "+str(max_depth))
+    print("Prediction Time: "+str(prediction_time))
     accuracy = accuracy_score(y2, y_pred)
-    print(str(accuracy))
-
-    precision = precision_score(y2, y_pred,average='weighted')
-    print(str(precision))
-    #recall_score(y2, y_pred)
-    #f1_score(y2, y_pred)
+    print("Accuracy: "+str(accuracy))
+    precision = precision_score(y2, y_pred, average='micro')
+    print("Precision: "+str(precision))
+    recall = recall_score(y2, y_pred, average='micro')
+    print("Recall: "+str(recall))
+    f_score = f1_score(y2, y_pred, average='micro')
+    print("F1-Score: "+str(f_score))
+    print("\n")
 
 
 
@@ -183,7 +198,8 @@ while menu:
         DBScan()
         print("Output guardado en la carpeta DBScan.")
     elif selection == 4:
-        Ejercicio3()
+        decisicion_tree()
+
     else:
         menu = False
 
