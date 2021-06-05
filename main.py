@@ -187,7 +187,6 @@ def Ejercicio3(mode, max_depth):
     #print(X)
 
     clf = DecisionTreeClassifier(criterion=mode,max_depth=max_depth).fit(X,y)
-
     testing_dataset = pd.read_csv("genero_peliculas_testing.csv")
     X2 = testing_dataset.iloc[:, :-1]
     X2 = X2.apply(LabelEncoder().fit_transform)
